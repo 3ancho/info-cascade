@@ -11,3 +11,5 @@ def index():
 def list_games():
     games = Game.all()
     return render_template('list_games.html', games=games)
+
+
