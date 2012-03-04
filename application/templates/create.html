@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h2>Create a game</h2>
+        <form action="{{ url_for('create_game') }}" method="post" accept-charset="utf-8">
+            {{ form.csrf_token }}
+            <p>
+            <label for="title">{{ form.title.label }}</label>
+            {{ form.title|safe }}
+
+            {% if form.title.errors %}
+            <ul class="errors">
+                {% for error in form.title.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            </p>
+            <p>
+            <label for="content">{{ form.max_turns.label }}</label>
+
+            {{ form.max_turns|safe }}
+
+            {% if form.max_turns.errors %}
+            <ul class="errors">
+                {% for error in form.max_turns.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            </p>
+            <p><input type="submit" value="Create"/></p>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
