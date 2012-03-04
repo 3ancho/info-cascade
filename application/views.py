@@ -10,7 +10,7 @@ def index():
 @app.route('/game/create', methods=["GET", "POST"])
 def create_game():
     form = GameForm()
-    if request.method == "POST" and form.validate_on_submit():
+    if request.method == "POST" and form.validate():
         game = Game(title=form.title.data, 
                     max_turns=form.max_turns.data)
         game.put()
@@ -20,5 +20,4 @@ def create_game():
 
 @app.route('/games')
 def list_games():
-    games = Game.all()
     pass

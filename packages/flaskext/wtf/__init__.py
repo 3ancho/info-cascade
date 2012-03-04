@@ -15,15 +15,15 @@ import uuid
 from wtforms.fields import BooleanField, DecimalField, DateField, \
     DateTimeField, FieldList, FloatField, FormField, \
     HiddenField, IntegerField, PasswordField, RadioField, SelectField, \
-    SelectMultipleField, SubmitField, TextField, TextAreaField
+    SelectMultipleField, StringField, SubmitField, TextField, TextAreaField
 
 from wtforms.validators import Email, email, EqualTo, equal_to, \
-    IPAddress, ip_address, Length, length, NumberRange, number_range, \
-    Optional, optional, Required, required, Regexp, regexp, \
-    URL, url, AnyOf, any_of, NoneOf, none_of
+    IPAddress, ip_address, Length, length, MacAddress, mac_address, \
+    NumberRange, number_range, Optional, optional, Required, required, Regexp, \
+    regexp, UUID, URL, url, AnyOf, any_of, NoneOf, none_of
 
 from wtforms.widgets import CheckboxInput, FileInput, HiddenInput, \
-    ListWidget, PasswordInput, RadioInput, Select, SubmitInput, \
+    ListWidget, Option, PasswordInput, RadioInput, Select, SubmitInput, \
     TableWidget, TextArea, TextInput
 
 from wtforms.fields import FileField as _FileField
@@ -69,9 +69,9 @@ validators.FileRequired = FileRequired
 __all__  = ['Form', 'ValidationError',
             'fields', 'validators', 'widgets', 'html5']
 
-__all__ += fields.__all__
+__all__ += fields.core.__all__
 __all__ += validators.__all__
-__all__ += widgets.__all__
+__all__ += widgets.core.__all__
 __all__ += recaptcha.__all__
 
 if _is_sqlalchemy:
