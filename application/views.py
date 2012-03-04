@@ -10,12 +10,12 @@ def index():
 @app.route('/game/create', methods=["GET", "POST"])
 def create_game():
     form = GameForm()
-    if request.method == "POST" and form.validate():
+    if form.validate_on_submit():
         game = Game(title=form.title.data, 
                     max_turns=form.max_turns.data)
         game.put()
-        flash("Game created!") 
-        return redirect(url_for('index')) 
+        flash("Game created!", "success") 
+        return redirect(url_for('create_game')) 
     return render_template('create.html', form=form)
 
 @app.route('/games')

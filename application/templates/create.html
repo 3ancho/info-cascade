@@ -1,9 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script src="/static/js/jquery.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+
 <div class="row">
     <div class="span12">
         <h2>Create a game</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul>
+            {% for category, message in messages %}
+            <li class="label label-{{category}}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
         <form action="{{ url_for('create_game') }}" method="post" accept-charset="utf-8">
             {{ form.csrf_token }}
             <p>
@@ -33,6 +46,21 @@
             </p>
             <p><input type="submit" value="Create"/></p>
         </form>
+        <a class="btn" data-toggle="modal" href="#myModal" >Launch Modal</a>
+
+        <div class="modal hide fade in" id="myModal">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3>Modal header</h3>
+            </div>
+            <div class="modal-body">
+                <p>One fine body…</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary">Save changes</a>
+                <a class="btn" data-dismiss="modal">Close</a>
+            </div>
+        </div>
     </div>
 </div>
 
