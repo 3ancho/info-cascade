@@ -14,6 +14,17 @@
             <li class="label label-{{category}}">{{ message }}</li>
             {% endfor %}
         </ul>
+        <div class="modal fade in" id="myModal">
+            <div class="modal-body">
+                <p>info-cascade.appspot.com{{uri}}</p>
+                <p><strong>Send this url to the players</strong></p>
+                <p>Content: {{contains}}</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn" href="/">Go home</a>
+                <a class="btn" href="{{uri}}">Play game</a>
+            </div>
+        </div>
         {% endif %}
         {% endwith %}
 
@@ -32,7 +43,7 @@
             {% endif %}
             </p>
             <p>
-            <label for="content">{{ form.max_turns.label }}</label>
+            <label for="mas_turns">{{ form.max_turns.label }}</label>
 
             {{ form.max_turns|safe }}
 
@@ -44,23 +55,10 @@
             </ul>
             {% endif %}
             </p>
-            <p><input type="submit" value="Create"/></p>
-        </form>
-        <a class="btn" data-toggle="modal" href="#myModal" >Launch Modal</a>
+            <p><input class="btn primary" type="submit" value="Create"/></p>
 
-        <div class="modal hide fade in" id="myModal">
-            <div class="modal-header">
-                <a class="close" data-dismiss="modal">×</a>
-                <h3>Modal header</h3>
-            </div>
-            <div class="modal-body">
-                <p>One fine body…</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn-primary">Save changes</a>
-                <a class="btn" data-dismiss="modal">Close</a>
-            </div>
-        </div>
+        </form>
+
     </div>
 </div>
 

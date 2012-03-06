@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="/static/js/jquery.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+
+<div class="row">
+    <div class="span12">
+        <h2>Play Game </h2>
+
+        <p>{{rule}}</p>
+        <p>{{contains}}</p>
+        <form action="/playgame/" method="post" accept-charset="utf-8">
+            <p><input class="btn primary" type="submit" value="Draw"/></p>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

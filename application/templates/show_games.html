@@ -5,7 +5,8 @@
     {% for game in games %}
     <li>
         {{ game.title }} 
-        {{ game.when }}
+        {{ game.max_turns }}
+        {{ game.key() }}
     </li>
     {% endfor %}
 </ul>
