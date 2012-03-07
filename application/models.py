@@ -9,8 +9,9 @@ class Game(db.Model):
     contains = db.StringProperty(required = True)
     
 class Play(db.Model):
-    player = db.StringProperty(required = True)
+    player = db.StringProperty()
     played = db.DateTimeProperty(auto_now_add = True)
     turn = db.IntegerProperty()
     game = db.ReferenceProperty(Game)
+    result = db.StringProperty()
 

@@ -6,4 +6,4 @@ class GameForm(wtf.Form):
     max_turns = wtf.IntegerField('Max turns', validators=[validators.Required()])
 
 class PlayForm(wtf.Form):
-    player = wtf.TextField('Your Name')
+    player = wtf.TextField('Your Name', validators=[validators.Required()])

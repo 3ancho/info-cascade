@@ -5,16 +5,50 @@
 <script src="/static/js/bootstrap.js"></script>
 
 <div class="row">
-    <div class="span12">
-        <h2>Play Game </h2>
+    <div class="modal hide fade in" id="myModal">
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <a class="btn" href="/">Go home</a>
+            <a class="btn" href="{{uri}}">Play game</a>
+        </div>
+    </div>
 
-        <p>{{rule}}</p>
-        <p>{{contains}}</p>
-        <form action="/playgame/" method="post" accept-charset="utf-8">
+    <div class="span8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul>
+            {% for category, message in messages %}
+            <li class="label label-{{category}}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <h2>Play Game </h2>
+        <p>Current turn: {{game.current_turn}}</p>
+        <p>Rule: {{rule}}</p>
+        <br>
+
+        <form action={{url_for('play_game', key=key) }} method="post" accept-charset="utf-8">
+            <p>
+            <label for="player">Player Name</label>
+            <input id="player" name="player" type="text" value="">
+            </p>
             <p><input class="btn primary" type="submit" value="Draw"/></p>
         </form>
 
+        {% if play %}
+        <p> {{play.result}} {{ play.played }} {{ play.player }}</p>
+        {% endif %}
+    </div>
+    <div class="span4">
+        <h1>Previous result</h1>
+        <ul>
+            <li>{{ black }}</li>
+            <li>{{ green }}</li>
+        </ul>
     </div>
 </div>
 
-{% endblock %}
+{% endblock %}      

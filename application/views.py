@@ -1,10 +1,9 @@
 from application import app
+from flask import render_template, request, flash, redirect, url_for
+from google.appengine.ext import db
 from models import *
 from forms import *
-from flask import render_template, request, flash, redirect, url_for
 import time, random
-from google.appengine.ext import db
-import logging
 
 
 @app.route('/')
@@ -26,7 +25,8 @@ def create_game():
         init = "{}{}".format(two,one)
         game = Game(title=form.title.data + timestamp, 
                     max_turns=form.max_turns.data,
-                    contains=init)
+                    contains=init,
+                    current_turn=1)
         key = game.put()
         flash("Game created!", "success") 
         
@@ -48,21 +48,39 @@ def show_games():
 @app.route('/playgame/<key>', methods=["GET", "POST"])
 def play_game(key):
     form = PlayForm()
-    logging.debug("key is ", key)
-
     game = db.get(str(key)) 
     rule = "There are three marbles, 2 black 1 green or 1 back 2 green"
-    if game.contains == "bgg":
-        contains = ""
-    else:
-        contains = ""
+  
 
+    # Get plays belongs to the game
+    plays = db.GqlQuery("SELECT * "
+                        "FROM Play "
+                        "WHERE game = :1 "
+                        "ORDER BY played", key)
+    black = 0
+    green = 0
+    for play in plays:
+        if play.result == "g": 
+            black += 1 
+        else:
+            green += 1 
+
+
+    # Handle POST
     if form.validate_on_submit():
         index = random.randint(0,2)
         drawn = game.contains[index]
 
-        play = Play(a,b,c)
+        play = Play(player=form.title.data, result=drawn, game=game)
+        # Modify >> play.game.current_turn += 1
+        game.current_turn += 1
+        game.put()
+        # Select * from play where parent = <key> 
         key = play.put()
-        return render_template('play_game.html', form=form, game=game)
-    return render_template('play_game.html', form=form, key=key, game=game, contains=contains, rule=rule)
+        
+        flash("You got {}".format(result), "success") 
+        return render_template('play_game.html', form=form, game=game, play=play)
+    # Handle GET
+    flash("hohoho")
+    return render_template('play_game.html', form=form, key=key, plays=plays, game=game, rule=rule, black=black, green=green)
     
