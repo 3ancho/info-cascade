@@ -7,3 +7,4 @@ class GameForm(wtf.Form):
 
 class PlayForm(wtf.Form):
     player = wtf.TextField('Your Name', validators=[validators.Required()])
+    guess = wtf.RadioField('YourGuess', validators=[validators.Required()], choices=["g", "b"])

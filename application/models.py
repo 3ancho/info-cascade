@@ -10,8 +10,9 @@ class Game(db.Model):
     
 class Play(db.Model):
     player = db.StringProperty()
-    played = db.DateTimeProperty(auto_now_add = True)
     turn = db.IntegerProperty()
     game = db.ReferenceProperty(Game)
-    result = db.StringProperty()
+    guess = db.StringProperty(required=True, choices=set(["g", "b"]))   # This may deleted
+    drawn = db.StringProperty(required=True, choices=set(["g", "b"]))   # This may deleted
+    played = db.DateTimeProperty(auto_now_add = True)
 

@@ -1,5 +1,5 @@
 from application import app
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, session 
 from google.appengine.ext import db
 from models import *
 from forms import *
@@ -47,7 +47,10 @@ def show_games():
 
 @app.route('/playgame/<key>', methods=["GET", "POST"])
 def play_game(key):
-    form = PlayForm()
+    '''
+    When GET, show use the previous guesses. A modal will display the drawn result.
+    Then the player will be provide a form asking for name and
+    '''
     game = db.get(str(key)) 
     rule = "There are three marbles, 2 black 1 green or 1 back 2 green"
   
@@ -56,31 +59,34 @@ def play_game(key):
     plays = db.GqlQuery("SELECT * "
                         "FROM Play "
                         "WHERE game = :1 "
-                        "ORDER BY played", key)
+                        "ORDER BY played", game)
     black = 0
     green = 0
     for play in plays:
-        if play.result == "g": 
+        if play.guess == "g": 
             black += 1 
         else:
             green += 1 
 
-
+    index = random.randint(0,2)
+    drawn = game.contains[index]
     # Handle POST
-    if form.validate_on_submit():
-        index = random.randint(0,2)
-        drawn = game.contains[index]
+    # form = PlayForm()
+    # if form.validate_on_submit():
+    if request.method == "POST":
 
-        play = Play(player=form.title.data, result=drawn, game=game)
+        play = Play(player=request.form['player'], guess=request.form['guess'], drawn=session['drawn'], game=game)
         # Modify >> play.game.current_turn += 1
         game.current_turn += 1
         game.put()
         # Select * from play where parent = <key> 
-        key = play.put()
+        play_key = play.put()
         
-        flash("You got {}".format(result), "success") 
-        return render_template('play_game.html', form=form, game=game, play=play)
+        session.pop('drawn')
+        # resirect to home
+        return render_template('play_game.html', key=key, game=game, black=black, green=green)
     # Handle GET
-    flash("hohoho")
-    return render_template('play_game.html', form=form, key=key, plays=plays, game=game, rule=rule, black=black, green=green)
+    flash("Welcome!")
+    session['drawn'] = drawn 
+    return render_template('play_game.html', key=key, game=game, drawn=drawn, rule=rule, black=black, green=green)
     

@@ -1,19 +1,11 @@
 {% extends "base.html" %}
-
+ 
 {% block content %}
 <script src="/static/js/jquery.js"></script>
 <script src="/static/js/bootstrap.js"></script>
 
 <div class="row">
-    <div class="modal hide fade in" id="myModal">
-        <div class="modal-body">
-        </div>
-        <div class="modal-footer">
-            <a class="btn" href="/">Go home</a>
-            <a class="btn" href="{{uri}}">Play game</a>
-        </div>
-    </div>
-
+    
     <div class="span8">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -28,25 +20,40 @@
         <h2>Play Game </h2>
         <p>Current turn: {{game.current_turn}}</p>
         <p>Rule: {{rule}}</p>
+        <a class="btn" data-toggle="modal" href="#myModal" >Draw!</a>
         <br>
-
+        <div class="modal hide fade in" id="myModal">
+            <div class="modal-body">
+            </div>
+            {% if drawn == "b" %}
+            <h1>Black</h1>
+            {% else  %}
+            <h1>Green</h1>
+            {% endif %}
+            <div class="modal-footer">
+                <a class="btn" data-dismiss="modal">Close</a>
+            </div>
+        </div>
+        <br>
         <form action={{url_for('play_game', key=key) }} method="post" accept-charset="utf-8">
             <p>
-            <label for="player">Player Name</label>
-            <input id="player" name="player" type="text" value="">
+            <label for="player">Player</label>
+            <input type="text" name="player" value="Your Name" /> 
             </p>
-            <p><input class="btn primary" type="submit" value="Draw"/></p>
+            <p>
+            <label for="guess">Guess</label>
+            <input type="radio" name="guess" value="g" /> Green <br>
+            <input type="radio" name="guess" value="b" /> Black
+            </p>
+            <input class="btn primary" type="submit" value="Submit Guess" />
         </form>
-
-        {% if play %}
-        <p> {{play.result}} {{ play.played }} {{ play.player }}</p>
-        {% endif %}
+ 
     </div>
     <div class="span4">
         <h1>Previous result</h1>
         <ul>
-            <li>{{ black }}</li>
-            <li>{{ green }}</li>
+            <li>Black guess <strong>{{ black }}</strong></li>
+            <li>Green guess <strong>{{ green }}</strong></li>
         </ul>
     </div>
 </div>
