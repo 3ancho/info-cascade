@@ -22,7 +22,7 @@ def create_game():
         else:
             one = "g"
             two = "bb"
-        init = "{}{}".format(two,one)
+        init = "%s%s".format(two,one)
         game = Game(title=form.title.data + timestamp, 
                     max_turns=form.max_turns.data,
                     contains=init,
