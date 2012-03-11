@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Action');
+        data.addColumn('number', 'count');
+        data.addRows([
+                ['Drawn Black Guessed Black', {{ analysis['bb'] }}],
+                ['Drawn Green Guessed Green', {{ analysis['gg'] }} ],
+                ['Drawn Black Guessed Green', {{ analysis['bg'] }}],
+                ['Drawn Green Guessed Black', {{ analysis['gb'] }}]
+                ]);
+
+        var options = {
+            title: 'Game Analysis',
+            colors: ['#7A7171','#4CC417', '#808000', '#C0C0C0' ]
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>
+<a href={{url_for('show_game',key=game.key())}}>{{game.title}}</a>
+<td>{{ game.max_turns }}</td>
+<td>{{ game.current_turn }}</td>
+<td>{{ game.end }}</td>
+{% if game.contains == 'bbg' %}
+<h2>Black: 2, Green: 1</h2>
+{% else %}
+<h2>Green: 2, Black: 1</h2>
+{% endif %}
+<br>
+{% if analysis %}
+<div id="chart_div" style="width: 900px; height: 500px;"></div>
+{% endif %}
+<br>
+
+{% if plays %}
+{% for play in plays %}
+<p>Turn:  {{ play.played }} {{ play.turn }}</p>    
+<p>Player:  {{ play.player }}</p>
+<p>Drawn:  {% if play.drawn == 'g' %}Green{% else %}Black{% endif %}</p>
+<p>Guess:  {% if play.guess == 'g' %}Green{% else %}Black{% endif %}</p>
+<br>
+{% endfor %}
+{% endif %}
+{% endblock %}
+
+

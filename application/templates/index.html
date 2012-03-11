@@ -2,25 +2,38 @@
 
 {% block content %}
 
+<div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<ul>
+    {% for category, message in messages %}
+    <li class="label label-{{category}}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+</div>
 <div class="hero-unit">
-  <h1> Welcome </h1>
-  <p> Information cascading is ...</p> 
+  <h1> A Game </h1>
+  <p> about information cascading, which is not very interesting...</p> 
+  <br>
+  <p>Some players will draw <strong>one</strong> marble randomly from a urn. 
+  A Player should not tell others about what color he/she has drawn.
+  According to the drawn color, he/she will guess which color is the majority.
+  You could create a game with a title and a number represent for max turns of this game.
+  Then a game is started and a url will be generated. Tell others about this url so they could join this game.
+  After reaching the max turn, a game will be ended. Then, you could view the analysis from "Show Games"</p>
 </div>
 <div class="row">
-    <div class="span4">
-        <h2>Start a new game</h2>
-        <p>Several user will draw <strong>one</strong> card randomly from a same pile. Player should not tell others about what card he/she have drawn. Then </p>
+    <div class="span6">
+        <h2>Create a game</h2>
+        <p>Create a game and send the url to your friends</p>
         <p><a class="btn" href="/game/create">Start &raquo;</a></p>
     </div>
-    <div class="span4">
-        <h2>Show running games</h2>
-        <p>Show running games</p>
+    <div class="span6">
+        <h2>Show Games</h2>
+        <p>Show running games and ended games</p>
         <p><a class="btn" href="/games">Show Games &raquo;</a></p>
-    </div>
-    <div class="span4">
-        <h2>Show history games' analysis</h2>
-        <p>Show analytics</p>
-        <p><a class="btn" href="/analytics">Show Analytics &raquo;</a></p>
     </div>
 </div>
 
