@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<table border="0">
+<table class="table table-bordered">
     <tr><th>Title</th><th>Max Turn</th><th>Current Turn</th><th>Status</th></tr>
     {% for game in games %}
     <tr>
         <td>
-            <a href={{url_for('show_game',key=game.key())}}>{{game.title}}</a>
+            <a class="" href={{url_for('show_game',key=game.key())}}>{{game.title}}</a>
         </td>
         <td>{{ game.max_turns }}</td>
         <td>{{ game.current_turn }}</td>
@@ -14,8 +14,9 @@
     </tr>
     {% endfor %}
 </table>
-<ul>
-</ul>
+
+<br>
+<br>
 {% endblock %}
 
 
