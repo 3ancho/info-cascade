@@ -26,15 +26,14 @@
 google.setOnLoadCallback(drawChart2);
 function drawChart2() {
     var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Turn');
+    data.addColumn('number', 'Turn');
     data.addColumn('number', 'Guess Black');
     data.addColumn('number', 'Guess Green');
     data.addRows([
-            {% for item in turnlist %}
+            {% for item in data_set %}
             
-            [{{}}, {{}}, {{}}],
-            ['2006',  860, 580],
-            ['2007', 1030, 540]
+            [{{item[0]}}, {{item[1]}}, {{item[2]}}]{% if not loop.last %},{% endif %}
+
             {% endfor %}
             ]);
 

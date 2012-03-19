@@ -44,7 +44,7 @@ def show_games():
     games = db.GqlQuery("SELECT * "
                         "FROM Game "
                         "ORDER BY created")
-
+    
     return render_template('show_games.html', games=games)
 
 @app.route('/game/<key>')
@@ -56,11 +56,21 @@ def show_game(key):
                             "WHERE game = :1 "
                             "ORDER BY played", game)
         analysis = {}
+        data_set = []
         analysis['bb'] = 0
         analysis['gg'] = 0
         analysis['gb'] = 0
         analysis['bg'] = 0
+        black_count = 0
+        green_count = 0
         for play in plays:
+            turn = play.turn
+            if play.guess == "b":
+                black_count += 1
+            else:
+                green_count += 1
+            #data = Data(turn, black_count, green_count)
+            data_set.append((turn, black_count, green_count))
             if play.drawn == "b" and play.guess == "b":
                 analysis['bb'] += 1
             elif play.drawn == "g" and play.guess == "g":
@@ -70,11 +80,13 @@ def show_game(key):
             else:
                 analysis['bg'] += 1
 
+
     else:
         plays = None
         analysis = None
+        data_set = None
 
-    return render_template('show_game.html', game=game, plays=plays, analysis=analysis)
+    return render_template('show_game.html', game=game, plays=plays, analysis=analysis, data_set=data_set)
 
 @app.route('/playgame/<key>', methods=["GET", "POST"])
 def play_game(key):

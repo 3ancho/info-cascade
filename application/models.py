@@ -17,3 +17,9 @@ class Play(db.Model):
     drawn = db.StringProperty(required=True, choices=set([u"g", u"b"]))   # This may deleted
     played = db.DateTimeProperty(auto_now_add = True)
 
+class Data():
+    def __init__(self, turn, black, green):
+        self.turn = turn
+        self.black = black
+        self.green = green
+
