@@ -69,7 +69,6 @@ def show_game(key):
                 black_count += 1
             else:
                 green_count += 1
-            #data = Data(turn, black_count, green_count)
             data_set.append((turn, black_count, green_count))
             if play.drawn == "b" and play.guess == "b":
                 analysis['bb'] += 1
