@@ -8,13 +8,15 @@
     
     <div class="span8">
         {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <ul>
-            {% for category, message in messages %}
-            <li class="label label-{{category}}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        <div class="alert alert-{{messages[0][0]}}">
+            {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
         {% endwith %}
 
         <h2>Play Game </h2>
@@ -24,14 +26,15 @@
         <br>
         <div class="modal hide fade in" id="myModal">
             <div class="modal-body">
-            </div>
+            <a class="btn btn-primary pull-right" data-dismiss="modal">Close</a>
             {% if drawn == "b" %}
             <h1>Black</h1>
+            <img src="/static/img/black.jpg">
             {% else  %}
             <h1>Green</h1>
+            <img src="/static/img/green.jpg">
             {% endif %}
-            <div class="modal-footer">
-                <a class="btn" data-dismiss="modal">Close</a>
+            <br>
             </div>
         </div>
         <br>

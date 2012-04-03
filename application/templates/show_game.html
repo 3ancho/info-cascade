@@ -2,6 +2,7 @@
 {% block content %}
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
+{% if game.end %}
     google.load("visualization", "1", {packages:["corechart"]});
     google.setOnLoadCallback(drawChart);
     function drawChart() {
@@ -44,6 +45,7 @@ title: 'Chart 2'
     var chart = new google.visualization.LineChart(document.getElementById('chart2'));
     chart.draw(data, options);
 }
+{% endif %}
 </script>
 
 <ul class="nav nav-pills">

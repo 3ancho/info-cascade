@@ -78,8 +78,6 @@ def show_game(key):
                 analysis['gb'] += 1
             else:
                 analysis['bg'] += 1
-
-
     else:
         plays = None
         analysis = None
