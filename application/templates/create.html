@@ -7,13 +7,15 @@
 <div class="row">
     <div class="span12">
         <h2>Create a game</h2>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <ul>
-            {% for category, message in messages %}
-            <li class="label label-{{category}}">{{ message }}</li>
-            {% endfor %}
-        </ul>
+        <div class="row">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                <li class="label label-{{category}}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
         <div class="modal fade in" id="myModal">
             <div class="modal-body">
                 <p>info-cascade.appspot.com{{uri}}</p>
@@ -42,6 +44,19 @@
             </ul>
             {% endif %}
             </p>
+
+            <label for="title">{{ form.password.label }}</label>
+            {{ form.password|safe }}
+
+            {% if form.password.errors %}
+            <ul class="errors">
+                {% for error in form.password.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            </p>
+
             <p>
             <label for="mas_turns">{{ form.max_turns.label }}</label>
 

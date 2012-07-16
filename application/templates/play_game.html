@@ -1,65 +1,91 @@
 {% extends "base.html" %}
- 
+
 {% block content %}
 <script src="/static/js/jquery.js"></script>
 <script src="/static/js/bootstrap.js"></script>
 
-<div class="row">
-    
-    <div class="span8">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        <div class="alert alert-{{messages[0][0]}}">
-            {% if messages %}
-            <ul>
-                {% for category, message in messages %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-        {% endwith %}
+<div class="row span10">
 
-        <h2>Play Game </h2>
-        <p>Current turn: {{game.current_turn}}</p>
-        <p>Rule: {{rule}}</p>
+    <div class="span10 well">
+        <h2>Game Status</h2>
+        <table>
+            <tr> <td>Black guess</td><td> <strong>{{ black }}</strong></td></tr>
+            <tr> <td>Green guess</td><td> <strong>{{ green }}</strong></td></tr>
+            <tr><td>Current turn</td><td> <strong>{{game.current_turn}} / {{game.max_turns}}</strong></td></tr>
+            <div class="progress progress-striped active">
+                <div class="bar" style="width: {{progress}}%;"></div>
+            </div>
+        </table>
+    </div>
+    <div class="span10 well">
+
+        <h3>Rule: {{rule}}</h3>
         <a class="btn" data-toggle="modal" href="#myModal" >Draw!</a>
         <br>
-        <div class="modal hide fade in" id="myModal">
+        <div class="modal hide pop in" id="myModal">
             <div class="modal-body">
-            <a class="btn btn-primary pull-right" data-dismiss="modal">Close</a>
-            {% if drawn == "b" %}
-            <h1>Black</h1>
-            <img src="/static/img/black.jpg">
-            {% else  %}
-            <h1>Green</h1>
-            <img src="/static/img/green.jpg">
-            {% endif %}
-            <br>
+                <a class="btn btn-primary pull-right" data-dismiss="modal">Close</a>
+                {% if drawn == "b" %}
+                <h1>Black</h1>
+                <img src="/static/img/black.jpg">
+                {% else  %}
+                <h1>Green</h1>
+                <img src="/static/img/green.jpg">
+                {% endif %}
+                <br>
             </div>
         </div>
         <br>
-        <form action={{url_for('play_game', key=key) }} method="post" accept-charset="utf-8">
+        <form action="#" method="post" accept-charset="utf-8">
             <p>
             <label for="player">Player</label>
-            <input type="text" name="player" value="Your Name" /> 
+            <input type="text" name="player" placeholder="Your Name" /> 
             </p>
             <p>
             <label for="guess">Guess</label>
-            <input type="radio" name="guess" value="g" /> Green <br>
-            <input type="radio" name="guess" value="b" /> Black
+            <a href="#" id="green" rel="popover" data-content="Click to submit" data-original-title="Guess Green?"><img width="40%" src="/static/img/green.jpg" /></a>
+            <a href="#" id="black" rel="popover" data-content="Click to submit" data-original-title="Guess Black?"><img width="40%" src="/static/img/black.jpg" /></a>
             </p>
             <input type="hidden" name="drawn" value={{ drawn }} /> 
-            <input class="btn primary" type="submit" value="Submit Guess" />
         </form>
- 
-    </div>
-    <div class="span4">
-        <h1>Previous result</h1>
-        <ul>
-            <li>Black guess <strong>{{ black }}</strong></li>
-            <li>Green guess <strong>{{ green }}</strong></li>
-        </ul>
+
     </div>
 </div>
+<script>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+    // jQuery
+    $(function () {
+        $("#green").popover({placement: "top"});
+
+        $("#green").live("mouseover", function() {
+            $("#green").popover('show');
+        });
+
+        $("#green").live("click", function() {
+            $.post("{{url_for('play_game', key=key) }}", {
+                drawn: "{{ drawn }}",
+                player: $('input[name="player"]').val(),
+                guess: "g",
+            },
+            function (data) {alert("submit success")});
+        });
+
+        $("#black").popover({placement: "top"});
+
+        $("#black").live("mouseover", function() {
+            $("#black").popover('show');
+        });
+
+        $("#black").live("click", function() {
+            $.post("{{url_for('play_game', key=key) }}", {
+                drawn: "{{ drawn }}",
+                player: $('input[name="player"]').val(),
+                guess: "b",
+            },
+            function (data) {alert("submit success")});
+        });
+    });
+</script>
 
 {% endblock %}      

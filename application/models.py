@@ -8,6 +8,7 @@ class Game(db.Model):
     current_turn = db.IntegerProperty()
     contains = db.StringProperty(required = True)
     end = db.BooleanProperty(required = True)
+    password = db.StringProperty(required = True)
     
 class Play(db.Model):
     player = db.StringProperty()

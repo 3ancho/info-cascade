@@ -25,6 +25,7 @@ def create_game():
         init = "{}{}".format(two,one)
         game = Game(title=form.title.data + timestamp, 
                     max_turns=form.max_turns.data,
+                    password=form.password.data,
                     contains=init,
                     current_turn=0,
                     end=False)
@@ -83,7 +84,9 @@ def show_game(key):
         analysis = None
         data_set = None
 
-    return render_template('show_game.html', game=game, plays=plays, analysis=analysis, data_set=data_set)
+    progress = game.current_turn / (1.0 * game.max_turns) * 100
+    app.logger.debug(game.password)
+    return render_template('show_game.html', game=game, plays=plays, analysis=analysis, data_set=data_set, progress=progress)
 
 @app.route('/playgame/<key>', methods=["GET", "POST"])
 def play_game(key):
@@ -93,8 +96,8 @@ def play_game(key):
     '''
     game = db.get(str(key)) 
     if game.end:
-        flash("{}. This game is finished".format(game.title), "warning") 
-        return render_template('index.html')
+        flash("{}. This game is finished. View result at... ".format(game.title), "warning") 
+        return redirect(url_for('show_game', key = key)) 
 
     rule = "There are three marbles, 2 black 1 green or 1 back 2 green"
 
@@ -130,6 +133,6 @@ def play_game(key):
         flash("You game result is summited successfully", "success")
         return redirect(url_for('index'))
     # Handle GET
-    flash("Welcome!")
-    return render_template('play_game.html', key=key, game=game, drawn=drawn, rule=rule, black=black, green=green)
+    progress = game.current_turn / (1.0 * game.max_turns) * 100
+    return render_template('play_game.html', key=key, game=game, drawn=drawn, rule=rule, black=black, green=green, progress=progress)
     

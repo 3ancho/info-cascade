@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<script src="/static/js/jquery.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
 {% if game.end %}
@@ -46,54 +47,77 @@ title: 'Chart 2'
     chart.draw(data, options);
 }
 {% endif %}
+
+$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+$(function () {
+    $("#check_password").live("click", function() {
+        if ($("#pass0").val() == $("#pass1").val())
+        {
+            $("#result").css("visibility", "visible");
+            $("#password_form").html("");
+        }
+        else
+        {
+            alert("password required");
+        }
+    });
+    $("#delete_game").live("click", function() {
+        if ($("#pass0").val() == $("#pass2").val())
+        {
+            $.post("/delete_game/{{game.key()}}");
+        }
+        else
+        {
+            alert("password required");
+        }
+    });
+});
 </script>
-
-<ul class="nav nav-pills">
-    <li class="active"><a href={{url_for('show_game',key=game.key())}}>{{game.title}}</a> </li> 
-    <li class="active"><a>Max Turns: {{ game.max_turns }}</a></li>
-    <li class="active"><a>Current Turn: {{ game.current_turn }}</a></li>
-    <li class="active"><a>Game is finished? {{ game.end }}</a></li>
-</ul>
-
-
-
-
-{% if game.end %}
-<div class="alert alert-info">
-    {% if game.contains == 'bbg' %}
-    <h2>Black: 2, Green: 1</h2>
-    {% else %}
-    <h2>Green: 2, Black: 1</h2>
-    {% endif %}
-</div>
-{% else %}
-<div class="alert">
-    <h2>You can not see the result until the game is finished</h2>
-</div>
-<a class="btn" href={{url_for('play_game',key=game.key())}}> Play it now </a>
-
+{% if not game.end %}
+<form style="visibility: visible" id="password_form">
+    <label>Password</label>
+    <input id="pass1" name="password" type="passowrd" />
+    <input id="pass0" type="hidden" value="{{game.password}}"  />
+    <br>
+    <a class="btn" id="check_password">Show game result</a>
+</form>
 {% endif %}
-<div class="row">
+<div id="result" {%if not game.end%} style="visibility: hidden" {% endif%}>
+    <ul class="nav nav-pills">
+        <li><a href={{url_for('show_game',key=game.key())}}>{{game.title}}</a> </li> 
+        <li><a>Current turn <strong>{{game.current_turn}} / {{game.max_turns}}<a></strong></li>
+    </ul>
 
-    <div class="span6">
-        {% if analysis %}
-        <div id="chart_div" style="width: 100%; height: 400px;"></div>
-        <div id="chart2" style="width: 100%; height: 400px;"></div>
+    <div class="alert alert-info">
+        {% if game.contains == 'bbg' %}
+        <h2>Black: 2, Green: 1</h2>
+        {% else %}
+        <h2>Green: 2, Black: 1</h2>
         {% endif %}
     </div>
+    <div class="row">
 
-    <div class="span6">
+        <div class="span6">
+            {% if analysis %}
+            <div id="chart_div" style="width: 100%; height: 400px;"></div>
+            <div id="chart2" style="width: 100%; height: 400px;"></div>
+            {% endif %}
+        </div>
 
-        {% if plays %}
-        {% for play in plays %}
-        <table class="table table-striped">
-            <tr><td>Turn {{ play.turn }}</td><td>{{ play.played }}</td> </tr>
-            <tr><td>Player</td><td>{{ play.player }}</td></tr>
-            <tr><td>Drawn</td><td>{% if play.drawn == 'g' %}Green{% else %}Black{% endif %}</td></tr>
-            <tr><td>Guess</td><td>{% if play.guess == 'g' %}Green{% else %}Black{% endif %}</td></tr>
-        </table>
-        {% endfor %}
-        {% endif %}
+        <div class="span6">
+
+            {% if plays %}
+            {% for play in plays %}
+            <table class="table table-striped">
+                <tr><td>Turn {{ play.turn }}</td><td>{{ play.played }}</td> </tr>
+                <tr><td>Player</td><td>{{ play.player }}</td></tr>
+                <tr><td>Drawn</td><td>{% if play.drawn == 'g' %}Green{% else %}Black{% endif %}</td></tr>
+                <tr><td>Guess</td><td>{% if play.guess == 'g' %}Green{% else %}Black{% endif %}</td></tr>
+            </table>
+            {% endfor %}
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}
